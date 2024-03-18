@@ -27,7 +27,7 @@ if __name__ == "__main__":
     for job_site in job_sites:
         jobs = scraper.scrape_github(job_site.site_url, job_site.site_type)
         total_jobs = len(jobs)
-        batch = 20
+        batch = 10
         start = 0
         while start < total_jobs:
             end = min(total_jobs, start + batch)
@@ -41,7 +41,7 @@ if __name__ == "__main__":
                 process.start()
 
             for process in processes:
-                process.join(timeout=200)
+                process.join(timeout=10)
                 if process.is_alive():
                     process.terminate()
                     print(f"Process {process.pid} timed out. Terminated.")

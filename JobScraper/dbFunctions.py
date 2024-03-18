@@ -1,5 +1,6 @@
 import psycopg2
 from configparser import ConfigParser
+import pandas as pd
 
 
 def config(filename='dbConfig.config', section='postgresql'):
@@ -77,7 +78,7 @@ def load_table(job):
         '''
     try:
         cur.execute(query, (
-        job.title, job.company, job.location, job.content, job.link, job.platform, job.type, job.date_object))
+            job.title, job.company, job.location, job.content, job.link, job.platform, job.type, job.date_object))
     except psycopg2.Error as e:
         print("Error loading job:", e)
     conn.commit()
