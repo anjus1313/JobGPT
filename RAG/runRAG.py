@@ -23,8 +23,6 @@ job_data = getdata()
 job_data['info'] = job_data.apply(lambda row: 'Company: ' + row['company'] + '\nJob Title: ' + row['jobtitle'] + '\nJob Description: ' + row['jobdetails'] + '\nLink to the Job: ' + row['link'], axis=1)
 query = "give me a job that has python and scala"
 relevant_doc = retrieve_documents(query, job_data['info'])
-print("Query:", query)
-#print("Most Relevant Document:", relevant_doc)
 relevant_doc = '\n'.join(relevant_doc)
 prompt = """
 JOBS: {} 
@@ -35,6 +33,7 @@ If the none of the JOBS answer the QUESTION,
 return that you do not know and provide suggestions of JOBS that are close to the QUESTION.
 Always add corresponding links to the suggested jobs.
 """.format(relevant_doc, query)
+print("Prompt:", prompt)
 
 
 # Your OpenAI API key

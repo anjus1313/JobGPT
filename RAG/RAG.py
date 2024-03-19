@@ -41,11 +41,13 @@ def retrieve_documents(query, documents):
     doc_embeddings = retriever_model.encode(documents, convert_to_tensor=True)
 
     # Calculate cosine similarity between query and documents
-    similarities = cosine_similarity(query_embedding.cpu().detach().numpy().reshape(1, -1),
-                                     doc_embeddings.cpu().detach().numpy())
-
+    similarities = cosine_similarity(doc_embeddings.cpu().detach().numpy(),query_embedding.cpu().detach().numpy().reshape(1, -1))
+    similarities = similarities.flatten()
     # Get the indices of top 10 most similar documents
-    top_n_indices = np.argsort(similarities[0])[-10:][::-1]
+    n = 10
+    sorted_similarities = np.sort(similarities)[::-1]
+    print("Highest", n, "values in the array:", sorted_similarities[:n])
+    top_n_indices = np.argsort(similarities)[-1*n:][::-1]
 
     # Get the top n most similar documents
     top_n_documents = [documents[idx] for idx in top_n_indices]
