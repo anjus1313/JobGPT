@@ -16,26 +16,24 @@ def getdata():
     sql_query = "SELECT * FROM jobs;"
     df = pd.read_sql_query(sql_query, conn)
     conn.close()
-    print(df)
     return df
 
 
 job_data = getdata()
-job_data['info'] = job_data.apply(
-    lambda row: 'Company: ' + row['company'] + '\nJob Title: ' + row['jobtitle'] + '\nJob Description: ' + row[
-        'jobdetails'] + '\nLink to the Job: ' + row['link'], axis=1)
-query = "give me a job that has data pipelines, scala and python. All 3 must be there"
+job_data['info'] = job_data.apply(lambda row: 'Company: ' + row['company'] + '\nJob Title: ' + row['jobtitle'] + '\nJob Description: ' + row['jobdetails'] + '\nLink to the Job: ' + row['link'], axis=1)
+query = "give me a job that has python and scala"
 relevant_doc = retrieve_documents(query, job_data['info'])
 print("Query:", query)
 #print("Most Relevant Document:", relevant_doc)
 relevant_doc = '\n'.join(relevant_doc)
 prompt = """
-DOCUMENT: {}
-QUESTION: {}
-INSTRUCTIONS:
-Answer the user's QUESTION using the DOCUMENT text above.
-Keep your answer grounded in the facts of the DOCUMENT.
-If the DOCUMENT doesn’t contain the facts to answer the QUESTION, return {{NONE}}
+JOBS: {} 
+QUESTION: {} 
+INSTRUCTIONS: Answer the user's QUESTION using the list of jobs mentioned in the JOBS text above. 
+Keep your answer grounded in the facts of the JOBS. 
+If the none of the JOBS answer the QUESTION, 
+return that you do not know and provide suggestions of JOBS that are close to the QUESTION.
+Always add corresponding links to the suggested jobs.
 """.format(relevant_doc, query)
 
 
