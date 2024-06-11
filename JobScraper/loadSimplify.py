@@ -1,4 +1,5 @@
-from JobScraper import dbFunctions as db, scraperFunctions as scraper
+import dbFunctions as db
+import scrapeSimplify as scraper
 import multiprocessing
 
 

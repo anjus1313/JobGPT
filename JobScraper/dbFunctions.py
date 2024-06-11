@@ -40,7 +40,7 @@ def create_table():
             company VARCHAR(200),
             location VARCHAR(200),
             jobDetails TEXT,
-            link VARCHAR(200),
+            link VARCHAR(1000),
             jobPlatform VARCHAR(200),
             jobType VARCHAR(200),
             datePosted TIMESTAMP
@@ -84,11 +84,20 @@ def load_table(job):
     close_connection(cur, conn)
 
 
-def display_table_rows():
-    [cur, conn] = create_connection()
-    query = "SELECT * FROM jobs"
+def display_table_rows(jobPlatform=None):
+    cur, conn = create_connection()
+
+    if jobPlatform is None:
+        query = "SELECT * FROM jobs"
+    else:
+        query = "SELECT * FROM jobs WHERE jobPlatform = %s"
+
     try:
-        cur.execute(query)
+        if jobPlatform is None:
+            cur.execute(query)
+        else:
+            cur.execute(query, (jobPlatform,))
+
         rows = cur.fetchall()
         for row in rows:
             print(row)
@@ -96,3 +105,4 @@ def display_table_rows():
         print("Error loading job:", e)
     conn.commit()
     close_connection(cur, conn)
+
